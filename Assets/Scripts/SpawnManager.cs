@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using DualPantoFramework;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -7,13 +8,23 @@ public class SpawnManager : MonoBehaviour
     public GameObject powerupPrefab;
     public int waveNumber = 0;  
     private int enemyCount;
+    public bool gameStarted = false;
 
     void Start()
     {
+        StartGame();
+    }
+
+    async void StartGame() {
+        Level room = GameObject.Find("Panto").GetComponent<Level>();
+        await room.PlayIntroduction();
+        GameObject.FindObjectOfType<PlayerController>().ActivatePlayer();
+        gameStarted = true;
     }
 
     void Update()
     {
+        if (!gameStarted) return;
         enemyCount = FindObjectsOfType<Enemy>().Length;
         if (enemyCount == 0)
         {
@@ -24,11 +35,15 @@ public class SpawnManager : MonoBehaviour
     }
 
     /// challenge: spawn specified numberOfEnemies using Instantiate(...)
-    void SpawnEnemyWave(int numberOfEnemies)
+    async void SpawnEnemyWave(int numberOfEnemies)
     {
         for (int i = 0; i < numberOfEnemies; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+            if (i == 0)
+            {
+                await GameObject.Find("Panto").GetComponent<LowerHandle>().SwitchTo(enemy);
+            }
         }
     }
 

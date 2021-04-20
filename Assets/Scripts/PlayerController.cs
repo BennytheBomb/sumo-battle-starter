@@ -3,6 +3,8 @@
 /// On Windows: CTRL + K and then CTRL + C
 
 using UnityEngine;
+using DualPantoFramework;
+using SpeechIO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,21 +15,78 @@ public class PlayerController : MonoBehaviour
     private float powerupStrength = 15f;
     public int powerupTime = 7;
     public GameObject powerupIndicator;
+    private SpeechIn speech;
+    private bool movementFrozen;
 
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        //ActivatePlayer();
+        speech = new SpeechIn(onSpeechRecognized);
+        speech.StartListening(new string[]{"help", "resume"});
+    }
+
+    async void onSpeechRecognized(string command) {
+        if (command == "resume" && movementFrozen) {
+            ResumeAfterPause();
+        } else if (command == "help" && !movementFrozen) {
+            ToggleMovementFrozen();
+            var powerups = GameObject.FindGameObjectsWithTag("Powerup");
+            if (powerups.Length > 0) {
+                await GameObject.Find("Panto").GetComponent<LowerHandle>().SwitchTo(powerups[0]);
+            }
+        }
+    }
+
+    void ToggleMovementFrozen() {
+        playerRb.constraints = movementFrozen ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeAll;
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            enemy.GetComponent<Rigidbody>().constraints = movementFrozen
+                                           ? RigidbodyConstraints.None
+                                           : RigidbodyConstraints.FreezeAll;
+        }
+        movementFrozen = !movementFrozen;
+    }
+
+    async void ResumeAfterPause() {
+        GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+        if (enemy != null)
+        {
+            await GameObject.Find("Panto").GetComponent<LowerHandle>().SwitchTo(enemy);
+        }
+        ToggleMovementFrozen();
+    }
+
+    public async void ActivatePlayer()
+    {
+        UpperHandle upperHandle = GameObject.Find("Panto").GetComponent<UpperHandle>();
+        await upperHandle.SwitchTo(gameObject, 0.2f);
+        upperHandle.FreeRotation(); 
     }
 
     void Update()
     {
+        if(!GameObject.FindObjectOfType<SpawnManager>().gameStarted) return;
         powerupIndicator.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
     }
 
     void FixedUpdate()
     {
-        float forwardInput = Input.GetAxis("Vertical");
-        playerRb.AddForce(focalPoint.transform.forward * forwardInput * speed);
+        if(!GameObject.FindObjectOfType<SpawnManager>().gameStarted) return;
+        //float forwardInput = Input.GetAxis("Vertical");
+        //playerRb.AddForce(focalPoint.transform.forward * forwardInput * speed);
+        PantoMovement();
+    }
+
+    void PantoMovement()
+    {
+        float rotation = GameObject
+                            .Find("Panto")
+                            .GetComponent<UpperHandle>()
+                            .GetRotation();
+        Vector3 direction = Quaternion.Euler(0, rotation, 0) * focalPoint.transform.forward; //Vector3.forward;
+        playerRb.AddForce(speed * direction);
     }
 
     void OnTriggerEnter(Collider other)
