@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     async void StartGame() {
         Level room = GameObject.Find("Panto").GetComponent<Level>();
         await room.PlayIntroduction();
-        GameObject.FindObjectOfType<PlayerController>().ActivatePlayer();
+        await GameObject.FindObjectOfType<PlayerController>().ActivatePlayer();
         gameStarted = true;
     }
 

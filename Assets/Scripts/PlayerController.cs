@@ -5,6 +5,7 @@
 using UnityEngine;
 using DualPantoFramework;
 using SpeechIO;
+using System.Threading.Tasks;
 
 public class PlayerController : MonoBehaviour
 {
@@ -58,10 +59,10 @@ public class PlayerController : MonoBehaviour
         ToggleMovementFrozen();
     }
 
-    public async void ActivatePlayer()
+    public async Task ActivatePlayer()
     {
         UpperHandle upperHandle = GameObject.Find("Panto").GetComponent<UpperHandle>();
-        await upperHandle.SwitchTo(gameObject, 0.2f);
+        await upperHandle.SwitchTo(gameObject);
         upperHandle.FreeRotation(); 
     }
 
@@ -81,12 +82,10 @@ public class PlayerController : MonoBehaviour
 
     void PantoMovement()
     {
-        float rotation = GameObject
-                            .Find("Panto")
-                            .GetComponent<UpperHandle>()
-                            .GetRotation();
-        Vector3 direction = Quaternion.Euler(0, rotation, 0) * focalPoint.transform.forward; //Vector3.forward;
-        playerRb.AddForce(speed * direction);
+        UpperHandle upperHandle =  GameObject.Find("Panto").GetComponent<UpperHandle>();
+        float rotation = upperHandle.GetRotation();
+        transform.eulerAngles = new Vector3(0, rotation, 0);
+        playerRb.velocity = speed * transform.forward;
     }
 
     void OnTriggerEnter(Collider other)
