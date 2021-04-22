@@ -436,20 +436,29 @@ namespace DualPantoFramework
             }
             else
             {
-                if (Input.GetMouseButton(0) && upperHandle.IsUserControlled())
+                if (Input.GetMouseButton(0))
                 {
-                    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    float mouseRotation = Input.GetAxis("Horizontal") * debugRotationSpeed * Time.deltaTime * 60f;
-                    Vector3 position = new Vector3(mousePosition.x, 0.0f, mousePosition.z);
-                    upperHandleRot = debugUpperHandle.transform.eulerAngles.y + mouseRotation;
+                    Vector3 position = debugUpperHandle.transform.position;
+                    if (upperHandle.IsUserControlled()) {
+                        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        position = new Vector3(mousePosition.x, 0.0f, mousePosition.z);
+                    }
+                    upperHandleRot = debugUpperHandle.transform.eulerAngles.y;
+                    if (upperHandle.IsRotationUserControlled()){
+                        float mouseRotation = Input.GetAxis("Horizontal") * debugRotationSpeed * Time.deltaTime * 60f;
+                        upperHandleRot += mouseRotation;
+                    }
                     upperHandle.SetPositions(position, upperHandleRot, null);
                 }
                 if (Input.GetMouseButton(1) && lowerHandle.IsUserControlled())
                 {
                     Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    float mouseRotation = Input.GetAxis("Horizontal") * debugRotationSpeed * Time.deltaTime * 60f;
                     Vector3 position = new Vector3(mousePosition.x, 0.0f, mousePosition.z);
-                    lowerHandleRot = debugLowerHandle.transform.eulerAngles.y + mouseRotation;
+                    lowerHandleRot = debugLowerHandle.transform.eulerAngles.y;
+                    if (lowerHandle.IsRotationUserControlled()){
+                        float mouseRotation = Input.GetAxis("Horizontal") * debugRotationSpeed * Time.deltaTime * 60f;
+                        lowerHandleRot += mouseRotation;
+                    }
                     lowerHandle.SetPositions(position, lowerHandleRot, null);
                 }
             }
