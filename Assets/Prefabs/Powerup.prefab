@@ -11,7 +11,11 @@ GameObject:
   - component: {fileID: 8364390323198973554}
   - component: {fileID: 8390752346878675550}
   - component: {fileID: 8381442029007404080}
+<<<<<<< Updated upstream
   - component: {fileID: 9208125039118521662}
+=======
+  - component: {fileID: 8509052970198054530}
+>>>>>>> Stashed changes
   m_Layer: 0
   m_Name: Powerup
   m_TagString: Powerup
@@ -82,7 +86,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+<<<<<<< Updated upstream
 --- !u!65 &9208125039118521662
+=======
+--- !u!65 &8509052970198054530
+>>>>>>> Stashed changes
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
