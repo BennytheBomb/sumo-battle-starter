@@ -8,6 +8,11 @@ public class SpawnManager : MonoBehaviour
     public int waveNumber = 0;  
     private int enemyCount;
     public string[] nameList;
+<<<<<<< Updated upstream
+=======
+
+    // TODO: add list of string with enemy names for TTS
+>>>>>>> Stashed changes
 
     void Start()
     {

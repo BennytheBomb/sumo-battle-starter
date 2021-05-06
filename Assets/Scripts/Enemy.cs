@@ -5,7 +5,10 @@ public class Enemy : MonoBehaviour
     public float speed = 8f;
     private Rigidbody enemyRb;
     private GameObject player;
+<<<<<<< Updated upstream
     public AudioClip nameClip;
+=======
+>>>>>>> Stashed changes
     public string displayName;
 
     void Start()

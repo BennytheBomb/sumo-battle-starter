@@ -12,7 +12,12 @@ public class PlayerController : MonoBehaviour
     public GameObject focalPoint;
     public bool hasPowerup;
     private float powerupStrength = 15f;
+<<<<<<< Updated upstream
+=======
+    private int powerupAmmo = 2;
+>>>>>>> Stashed changes
     public int powerupTime = 7;
+    private bool playerFellDown;
     public GameObject powerupIndicator;
     public bool playerFellDown;
     private PlayerSoundEffect soundEffects;
@@ -20,20 +25,66 @@ public class PlayerController : MonoBehaviour
     public float explosionPower = 2000f;
     public float explosionUpwardForce = 5f;
     public LayerMask explosionAffected;
+<<<<<<< Updated upstream
     private SpeechIn speechIn;
+=======
+    private PlayerSoundEffect soundEffects;
+    SpeechIn speechIn;
+>>>>>>> Stashed changes
 
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         soundEffects = GetComponent<PlayerSoundEffect>();
         speechIn = new SpeechIn(onRecognized);
+<<<<<<< Updated upstream
         PowerUpListener();
     }
+=======
+        speechIn.StartListening();
+        PowerUpListener();
+    }
+    async void onRecognized(string message)
+    {
+        // handle defined meta-commands
+        switch (message)
+        {
+            case "repeat":
+                await soundEffects.speechOut.Repeat();
+                break;
+            case "quit":
+                await soundEffects.speechOut.Speak("Thanks for using our application. Closing down now...");
+                OnApplicationQuit();
+                Application.Quit();
+                break;
+            case "options":
+                string commandlist = "";
+                foreach (string command in speechIn.GetActiveCommands())
+                {
+                    commandlist += command + ", ";
+                }
+                await soundEffects.speechOut.Speak("currently available commands: " + commandlist);
+                break;
+        }
+    }
+
+    public void OnApplicationQuit()
+    {
+        speechIn.StopListening();
+    }
+
+
+
+    // TODO: implement function onApplicationQuit to kill the speech In component
+>>>>>>> Stashed changes
 
     void Update()
     {
         powerupIndicator.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         if (transform.position.y < -10f && !playerFellDown)
         {
             playerFellDown = true;
@@ -54,6 +105,14 @@ public class PlayerController : MonoBehaviour
         switch (powerup)
         {
             case "boom":
+<<<<<<< Updated upstream
+=======
+                if (powerupAmmo <= 0)
+                {
+                    await soundEffects.speechOut.Speak("no ammo for:" + powerup);
+                    return;
+                }
+>>>>>>> Stashed changes
                 ExplosionPowerup();
                 break;
             case "jump":
@@ -65,7 +124,10 @@ public class PlayerController : MonoBehaviour
         }
         PowerUpListener();
     }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
     void onRecognized(string message)
     {
@@ -97,9 +159,16 @@ public class PlayerController : MonoBehaviour
         {
             Enemy enemy = other.GetComponent<Enemy>();
             soundEffects.PlayHit();
+<<<<<<< Updated upstream
             soundEffects.PlayEnemyHitClip(enemy.nameClip, other);
         }
             
+=======
+            soundEffects.PlayEnemyHitClip(other);
+        }
+
+        // TODO: add spoken sound clip with enemy name
+>>>>>>> Stashed changes
 
         /// challenge: when collision has tag "Enemy" and we have a powerup
         /// get the enemyRigidbody and push the enemy away from the player
@@ -112,6 +181,7 @@ public class PlayerController : MonoBehaviour
     }
     public void ExplosionPowerup()
     {
+        powerupAmmo--;
         Vector3 explosionPos = transform.position;
         Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, explosionAffected);
         foreach (Collider hit in colliders)
