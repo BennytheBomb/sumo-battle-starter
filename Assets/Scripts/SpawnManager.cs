@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject powerupPrefab;
     public int waveNumber = 0;  
     private int enemyCount;
+    public string[] nameList;
 
     void Start()
     {
@@ -29,6 +30,7 @@ public class SpawnManager : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+            enemy.GetComponent<Enemy>().displayName = nameList[i % nameList.Length];
         }
     }
 

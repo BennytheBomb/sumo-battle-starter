@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5847997475746740545}
   - component: {fileID: 8542534630230499279}
   - component: {fileID: 8643019557595335216}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -110,6 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  nameClip: {fileID: 0}
+  displayName: 
 --- !u!54 &8643019557595335216
 Rigidbody:
   m_ObjectHideFlags: 0
