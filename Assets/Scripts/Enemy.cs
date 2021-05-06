@@ -5,8 +5,8 @@ public class Enemy : MonoBehaviour
     public float speed = 8f;
     private Rigidbody enemyRb;
     private GameObject player;
-    public AudioClip nameClip;
-    public string displayName;
+    // TODO: add nameClip property
+    // TODO: add displayName property
 
     void Start()
     {

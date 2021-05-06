@@ -7,7 +7,8 @@ public class SpawnManager : MonoBehaviour
     public GameObject powerupPrefab;
     public int waveNumber = 0;  
     private int enemyCount;
-    public string[] nameList;
+    // TODO: add list of audio clips for enemy names
+    // TODO: add list of string with enemy names for TTS
 
     void Start()
     {
@@ -23,14 +24,14 @@ public class SpawnManager : MonoBehaviour
             SpawnPowerup();
         }
     }
-
-    /// challenge: spawn specified numberOfEnemies using Instantiate(...)
     void SpawnEnemyWave(int numberOfEnemies)
     {
         for (int i = 0; i < numberOfEnemies; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
-            enemy.GetComponent<Enemy>().displayName = nameList[i % nameList.Length];
+            // TODO: give every newly created enemy a clip from the list
+
+            // TODO: assign a string from the nameList to each created enemy
         }
     }
 

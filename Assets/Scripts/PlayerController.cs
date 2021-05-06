@@ -12,65 +12,43 @@ public class PlayerController : MonoBehaviour
     public GameObject focalPoint;
     public bool hasPowerup;
     private float powerupStrength = 15f;
+    private int powerupAmmo = 0;
     public int powerupTime = 7;
     public GameObject powerupIndicator;
-    public bool playerFellDown;
-    private PlayerSoundEffect soundEffects;
     public float explosionRadius = 10f;
     public float explosionPower = 2000f;
     public float explosionUpwardForce = 5f;
     public LayerMask explosionAffected;
-    private SpeechIn speechIn;
-
+    private PlayerSoundEffect soundEffects;
+    // TODO: add SpeechIn component
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
-        soundEffects = GetComponent<PlayerSoundEffect>();
-        speechIn = new SpeechIn(onRecognized);
-        PowerUpListener();
-    }
+        // TODO: add sound effect component
 
+        // TODO: start listening to speech recognizer and link a function onRecognized to the speechIn object
+    }
+    // TODO: implement function onRecognized with debug output
+
+    // TODO: extend the onRecognized function with general purpose commands like repeat and quit
+
+    // TODO: implement function onApplicationQuit to kill the speech In component
+
+    // TODO: implement function PowerUpListener that listens to the word boom to trigger a powerup
+
+    // TODO: extend the PowerUpListener to reply when the user is out of ammo and recursively call the function
     void Update()
     {
         powerupIndicator.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
+        // TODO: add logic and sound effect for falling down
 
-        if (transform.position.y < -10f && !playerFellDown)
-        {
-            playerFellDown = true;
-            float clipTime = soundEffects.PlayerFellDown();
-            speechIn.StopListening();
-            Destroy(gameObject, clipTime);
-        }
+        // TODO: before destroying the game object, kill the speech in component
         if (Input.GetButtonDown("Jump"))
         {
             ExplosionPowerup();
         }
-        if (Input.GetButtonDown("Cancel"))
-            speechIn.StopListening();
-    }
-    async void PowerUpListener()
-    {
-        string powerup = await speechIn.Listen(new string[] { "boom", "jump", "hide" });
-        switch (powerup)
-        {
-            case "boom":
-                ExplosionPowerup();
-                break;
-            case "jump":
-                //JumpPowerup();
-                break;
-            case "hide":
-                //HidePowerup();
-                break;
-        }
-        PowerUpListener();
     }
 
-
-    void onRecognized(string message)
-    {
-        Debug.Log("[" + this.GetType() + "]: " + message);
-    }
     void FixedUpdate()
     {
         float forwardInput = Input.GetAxis("Vertical");
@@ -93,17 +71,11 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         GameObject other = collision.gameObject;
-        if (other.CompareTag("Enemy"))
-        {
-            Enemy enemy = other.GetComponent<Enemy>();
-            soundEffects.PlayHit();
-            soundEffects.PlayEnemyHitClip(enemy.nameClip, other);
-        }
-            
+        // TODO: add sound effect for hitting an enemy
 
-        /// challenge: when collision has tag "Enemy" and we have a powerup
-        /// get the enemyRigidbody and push the enemy away from the player
-        if (other.CompareTag("Enemy") && hasPowerup)
+        // TODO: add spoken sound clip with enemy name
+
+        if (other.CompareTag("Enemy") && hasPowerup) //blow the enemy away!
         {
             Rigidbody enemyRigidbody = other.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = other.transform.position - transform.position;
@@ -125,9 +97,5 @@ public class PlayerController : MonoBehaviour
     {
         hasPowerup = false;
         powerupIndicator.gameObject.SetActive(false);
-    }
-    public void OnApplicationQuit()
-    {
-        speechIn.StopListening();
     }
 }
