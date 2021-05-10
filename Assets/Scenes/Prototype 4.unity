@@ -1197,6 +1197,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Powerup
       objectReference: {fileID: 0}
+    - target: {fileID: 8358841764381053340, guid: 1e97d31f55bd54879aa6c01e712f382d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8364390323198973554, guid: 1e97d31f55bd54879aa6c01e712f382d,
         type: 3}
       propertyPath: m_LocalPosition.x

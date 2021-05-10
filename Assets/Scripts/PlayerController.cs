@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public int powerupTime = 7;
     public GameObject powerupIndicator;
     private SpeechIn speech;
+    private SpeechOut speechOut;
     private bool movementFrozen;
 
     void Start()
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
         //ActivatePlayer();
         speech = new SpeechIn(onSpeechRecognized);
         speech.StartListening(new string[]{"help", "resume"});
+        speechOut = new SpeechOut();
     }
 
     async void onSpeechRecognized(string command) {
@@ -88,7 +90,7 @@ public class PlayerController : MonoBehaviour
         playerRb.velocity = speed * transform.forward;
     }
 
-    void OnTriggerEnter(Collider other)
+    async void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Powerup"))
         {
@@ -97,6 +99,8 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
             CancelInvoke("PowerupCountdown"); // if we previously picked up an powerup
             Invoke("PowerupCountdown", powerupTime);
+            await speechOut.Speak("You got the power up");
+            GameObject.FindObjectOfType<SpawnManager>().SpawnEnemyWave();
         }
     }
 
@@ -117,5 +121,9 @@ public class PlayerController : MonoBehaviour
     {
         hasPowerup = false;
         powerupIndicator.gameObject.SetActive(false);
+    }
+
+    void OnApplicationQuit() {
+        speechOut.Stop();
     }
 }
