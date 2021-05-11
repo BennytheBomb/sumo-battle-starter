@@ -5,14 +5,9 @@ public class SpawnManager : MonoBehaviour
     public GameObject enemyPrefab;
     private float spawnRange = 9f;
     public GameObject powerupPrefab;
-    public int waveNumber = 0;  
+    public int waveNumber = 0;
     private int enemyCount;
     public string[] nameList;
-<<<<<<< Updated upstream
-=======
-
-    // TODO: add list of string with enemy names for TTS
->>>>>>> Stashed changes
 
     void Start()
     {

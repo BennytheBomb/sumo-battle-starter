@@ -12,35 +12,22 @@ public class PlayerController : MonoBehaviour
     public GameObject focalPoint;
     public bool hasPowerup;
     private float powerupStrength = 15f;
-<<<<<<< Updated upstream
-=======
     private int powerupAmmo = 2;
->>>>>>> Stashed changes
     public int powerupTime = 7;
     private bool playerFellDown;
     public GameObject powerupIndicator;
-    public bool playerFellDown;
     private PlayerSoundEffect soundEffects;
     public float explosionRadius = 10f;
     public float explosionPower = 2000f;
     public float explosionUpwardForce = 5f;
     public LayerMask explosionAffected;
-<<<<<<< Updated upstream
-    private SpeechIn speechIn;
-=======
-    private PlayerSoundEffect soundEffects;
     SpeechIn speechIn;
->>>>>>> Stashed changes
 
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         soundEffects = GetComponent<PlayerSoundEffect>();
         speechIn = new SpeechIn(onRecognized);
-<<<<<<< Updated upstream
-        PowerUpListener();
-    }
-=======
         speechIn.StartListening();
         PowerUpListener();
     }
@@ -68,23 +55,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnApplicationQuit()
-    {
-        speechIn.StopListening();
-    }
-
-
-
-    // TODO: implement function onApplicationQuit to kill the speech In component
->>>>>>> Stashed changes
-
     void Update()
     {
         powerupIndicator.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
         if (transform.position.y < -10f && !playerFellDown)
         {
             playerFellDown = true;
@@ -105,14 +78,11 @@ public class PlayerController : MonoBehaviour
         switch (powerup)
         {
             case "boom":
-<<<<<<< Updated upstream
-=======
                 if (powerupAmmo <= 0)
                 {
                     await soundEffects.speechOut.Speak("no ammo for:" + powerup);
                     return;
                 }
->>>>>>> Stashed changes
                 ExplosionPowerup();
                 break;
             case "jump":
@@ -124,21 +94,13 @@ public class PlayerController : MonoBehaviour
         }
         PowerUpListener();
     }
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
-
-    void onRecognized(string message)
-    {
-        Debug.Log("[" + this.GetType() + "]: " + message);
-    }
     void FixedUpdate()
     {
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * forwardInput * speed);
     }
- 
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -159,16 +121,8 @@ public class PlayerController : MonoBehaviour
         {
             Enemy enemy = other.GetComponent<Enemy>();
             soundEffects.PlayHit();
-<<<<<<< Updated upstream
-            soundEffects.PlayEnemyHitClip(enemy.nameClip, other);
-        }
-            
-=======
             soundEffects.PlayEnemyHitClip(other);
         }
-
-        // TODO: add spoken sound clip with enemy name
->>>>>>> Stashed changes
 
         /// challenge: when collision has tag "Enemy" and we have a powerup
         /// get the enemyRigidbody and push the enemy away from the player

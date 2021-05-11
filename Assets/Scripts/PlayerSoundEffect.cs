@@ -41,7 +41,6 @@ public class PlayerSoundEffect : MonoBehaviour
             }
             previousEnemy = go;
         }
-        Debug.Log("test");
         SayName(go.GetComponent<Enemy>());
     }
 
