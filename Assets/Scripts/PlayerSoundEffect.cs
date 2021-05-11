@@ -29,20 +29,28 @@ public class PlayerSoundEffect : MonoBehaviour
     {
         audioSource.PlayOneShot(dropInClip);
     }
-    public void PlayEnemyHitClip(AudioClip clip, GameObject go = null)
+    public void PlayEnemyHitClip(GameObject go = null)
     {
-        // TODO: add logic to make sure you only play the clip when colliding with a new enemy
+        if (go)
+        {
+            if (previousEnemy)
+            {
+                if (go.Equals(previousEnemy))
+                    return;
+            }
+            previousEnemy = go;
+            SayName(go.GetComponent<Enemy>());
+        }
 
-        // TODO: play the sound clip that is passed to the function
-
-        // TODO: reset the source clip file to override previous clip
-
-        // TODO: generate the speech using TTS
 
         // TODO: add method to call asynchronously 
     }
+    private async void SayName(Enemy e)
+    {
+        speechOut.Stop();
+        await speechOut.Speak(e.displayName + " hit me");
+    }
 
-    //TODO: implement async method sayName
 
     public void StopPlayback()
     {

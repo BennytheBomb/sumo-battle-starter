@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private float powerupStrength = 15f;
     private int powerupAmmo = 0;
     public int powerupTime = 7;
+    private bool playerFellDown;
     public GameObject powerupIndicator;
     public float explosionRadius = 10f;
     public float explosionPower = 2000f;
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
-        // TODO: add sound effect component
+        soundEffects = GetComponent<PlayerSoundEffect>();
 
         // TODO: start listening to speech recognizer and link a function onRecognized to the speechIn object
     }
@@ -40,7 +41,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         powerupIndicator.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
-        // TODO: add logic and sound effect for falling down
+        if (transform.position.y < -10f && !playerFellDown)
+        {
+            playerFellDown = true;
+            float clipTime = soundEffects.PlayerFellDown();
+            Destroy(gameObject, clipTime);
+        }
 
         // TODO: before destroying the game object, kill the speech in component
         if (Input.GetButtonDown("Jump"))
@@ -71,7 +77,11 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         GameObject other = collision.gameObject;
-        // TODO: add sound effect for hitting an enemy
+        if (other.CompareTag("Enemy"))
+        {
+            soundEffects.PlayHit();
+            soundEffects.PlayEnemyHitClip(other);
+        }
 
         // TODO: add spoken sound clip with enemy name
 
