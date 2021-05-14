@@ -21,14 +21,40 @@ public class PlayerController : MonoBehaviour
     public float explosionUpwardForce = 5f;
     public LayerMask explosionAffected;
     private PlayerSoundEffect soundEffects;
-    // TODO: add SpeechIn component
+    SpeechIn speechIn;
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         soundEffects = GetComponent<PlayerSoundEffect>();
-
-        // TODO: start listening to speech recognizer and link a function onRecognized to the speechIn object
+        speechIn = new SpeechIn(onRecognized);
+        speechIn.StartListening();
+        PowerUpListener();
     }
+    void onRecognized(string message)
+    {
+        Debug.Log("[" + this.GetType() + "]: " + message);
+    }
+    public void OnApplicationQuit()
+    {
+        speechIn.StopListening();
+    }
+    async void PowerUpListener()
+    {
+        string powerup = await speechIn.Listen(new string[] { "boom", "jump", "hide" });
+        switch (powerup)
+        {
+            case "boom":
+                ExplosionPowerup();
+                break;
+            case "jump":
+                //JumpPowerup();
+                break;
+            case "hide":
+                //HidePowerup();
+                break;
+        }
+    }
+
     // TODO: implement function onRecognized with debug output
 
     // TODO: extend the onRecognized function with general purpose commands like repeat and quit
@@ -45,6 +71,7 @@ public class PlayerController : MonoBehaviour
         {
             playerFellDown = true;
             float clipTime = soundEffects.PlayerFellDown();
+            speechIn.StopListening();
             Destroy(gameObject, clipTime);
         }
 
