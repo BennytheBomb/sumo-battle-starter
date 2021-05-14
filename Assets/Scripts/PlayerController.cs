@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         soundEffects = GetComponent<PlayerSoundEffect>();
         speechIn = new SpeechIn(onRecognized);
-        speechIn.StartListening();
         PowerUpListener();
     }
     void onRecognized(string message)
