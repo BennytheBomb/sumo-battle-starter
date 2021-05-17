@@ -4,6 +4,7 @@
 
 using UnityEngine;
 using SpeechIO;
+using System.Threading;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,13 +29,13 @@ public class PlayerController : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         soundEffects = GetComponent<PlayerSoundEffect>();
         speechIn = new SpeechIn(onRecognized);
-        speechIn.StartListening();
         PowerUpListener();
+        metaCommands();
     }
-    async void onRecognized(string message)
+    async void metaCommands() // handle defined meta-commands
     {
-        // handle defined meta-commands
-        switch (message)
+        string meta = await speechIn.Listen(new string[] { "repeat", "quit", "options" });
+        switch (meta)
         {
             case "repeat":
                 await soundEffects.speechOut.Repeat();
@@ -53,6 +54,10 @@ public class PlayerController : MonoBehaviour
                 await soundEffects.speechOut.Speak("currently available commands: " + commandlist);
                 break;
         }
+    }
+    void onRecognized(string message)
+    {
+        Debug.Log("recognized " + message);
     }
 
     void Update()

@@ -47,7 +47,14 @@ public class PlayerSoundEffect : MonoBehaviour
     private async void SayName(Enemy e)
     {
         speechOut.Stop();
-        await speechOut.Speak(e.displayName + "hit me");
+        if (e.displayName == "Thijs")
+        {
+            await speechOut.Speak("tighs hit me"); //got to get samantha to pronounce it well ;)
+        }
+        else
+        {
+            await speechOut.Speak(e.displayName + " hit me");
+        }
     }
 
     public void StopPlayback()
