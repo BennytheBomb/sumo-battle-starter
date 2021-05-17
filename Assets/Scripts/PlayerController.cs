@@ -28,6 +28,32 @@ public class PlayerController : MonoBehaviour
         soundEffects = GetComponent<PlayerSoundEffect>();
         speechIn = new SpeechIn(onRecognized);
         PowerUpListener();
+        metaCommands();
+    }
+    async void metaCommands()
+    {
+        string meta = await speechIn.Listen(new string[] { "repeat", "quit", "options" });
+        switch (meta)
+        {
+            case "repeat":
+                await soundEffects.speechOut.Repeat();
+                metaCommands();
+                break;
+            case "quit":
+                await soundEffects.speechOut.Speak("Thanks for using our application. Closing down now...");
+                OnApplicationQuit();
+                Application.Quit();
+                break;
+            case "options":
+                string commandlist = "";
+                foreach (string command in speechIn.GetActiveCommands())
+                {
+                    commandlist += command + ", ";
+                }
+                await soundEffects.speechOut.Speak("currently available commands: " + commandlist);
+                metaCommands();
+                break;
+        }
     }
     void onRecognized(string message)
     {
